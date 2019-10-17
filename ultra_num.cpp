@@ -1,4 +1,4 @@
-#include<vector>
+﻿#include<vector>
 #include<queue>
 #include <string>
 #include<iostream>
@@ -246,42 +246,101 @@ public:
      string  udiv(string x="",string y="",ll b=0)
      {
          clr();
-
         ll p=x.length();
         ll q=y.length();
         queue<char>z;
-
         string rem="",que="",tmp="";
+        ll a=0,d=0,f=0,g=0;              
+        for(ll i=0;i<p;i++)if(x[i]=='.')
+        {
+        	a=p-1-i;
+        	g=i;
+        	break;
+        }
+        if(g==0)g=p;        
+        for(ll i=0;i<q;i++)if(y[i]=='.')
+        {
+        	d=q-1-i;
+        	f=i;
+        	break;
+        }             
+        string ty="";
+        for(ll i=0;i<q;i++)if(y[i]!='.')ty=ty+y[i];
+        y=ty;      
+        string tx="";
+        for(ll i=0;i<p;i++)if(x[i]!='.')tx=tx+x[i];
+        x=tx;
+        
+        if(a&&d)
+            {
+            	  if(a<d)for(ll i=0;i<(d-a);i++)x+="0";
+                  if(a>d)for(ll i=0;i<(a-d);i++)y+="0";
+            }
+            
+        p=x.length();
+        q=y.length();
+            
+         tx=x;
+         ll v=0;
+                      
+        if(ucomp(x,y,b)==2)
+     	{
+     		while(x.length()<=q)x+="0";
+     	}
+        p=x.length();
+        
         for(ll i=0;i<p;i++)z.push(x[i]);
+        
 
         for(ll i=0;i<p;i++)
         {
-            tmp=tmp+z.front();
+            tmp=tmp+z.front();     
             z.pop();
-
-            if(tmp>y)
+           
+            if(ucomp(tmp,y,b)==1||ucomp(tmp,y,b)==0)
             {
-                cout<<tmp<<"\n";
-                string v="";
-                for(ll j=1;j<b;j++)
+                string v="",mm="";
+                for(ll j=0;j<b;j++)
                 {
                     if(j<=9)v=to_string(j);
                     else v=(char)(j+55);
-                    if(ucomp(umul(y,v),tmp)==1)
+                    cout<<umul(y,v,b)<<"\n";
+                    if(ucomp(umul(y,v,b),tmp,b)==1)
                     {
                         j=j-1;
                         if(j<=9)v=to_string(j);
                         else v=(char)(j+55);
-                        tmp=usub(umul(y,v),tmp);
-                        que=v+que;
+                        mm=umul(y,v,b);
+                        tmp=usub(tmp,mm,b);
+                        ll k=0;
+                        while(tmp[k++]=='0');
+                        tmp=tmp.substr(k-1);
+                        que=que+v;
                         break;
                     }
                 }
-                if(i=p-1)rem=tmp;
+                if(i==p-1)rem=tmp;
+            }
+            else
+            {
+            	que=que+"0";
             }
         }
+        
+        if(ucomp(tx,y,b)==2)
+     	{
+     		ll k=0;
+     		while(que[k++]=='0')
+     		;
+            que=que.substr(k-1);
+            string z="0.";
+            ll v=f-g;
+            if(v)while(v--)z+="0";
+            z+=que;
+            que=z;
+     	}
 
-         return "";
+         return que;
      }
 
      string  usub(string x="",string y="",ll b=0)
@@ -291,6 +350,12 @@ public:
         stv(y,1);
         a1.swap(b1);
         a2.swap(b2);
+        ll p=a1.size();
+        ll q=b1.size();
+        if(p>q)b1.insert(b1.begin(),(p-q),0);
+        p=a1.size();
+        q=b1.size();
+        if(p>q)b1.insert(b2.end(),(p-q),0);
         string s=uadd(x,nc(1,b),b);
         return s.substr(s.length()-x.length());
      }
@@ -301,8 +366,36 @@ public:
         stv(x);
         stv(y,1);
         uadd(x,y,b);
-        if(x.compare(y)<0)return 2;
-        else if(x.compare(y)>0)return 1;
+        x="";
+        y="";
+        for(ll i=0;i<a1.size();i++)
+        {
+        	if(a1[i]<=9)a1[i]+=48;
+            else if(a1[i]>9)a1[i]+=55;
+            x+=(char)a1[i];
+        }
+        x=x+".";
+        for(ll i=0;i<a2.size();i++)
+        {
+        	if(a2[i]<=9)a2[i]+=48;
+            else if(a2[i]>9)a2[i]+=55;
+            x+=(char)a2[i];;
+        }
+        for(ll i=0;i<b1.size();i++)
+          {
+        	if(b1[i]<=9)b1[i]+=48;
+            else if(b1[i]>9)b1[i]+=55;
+            y+=(char)b1[i];
+          }
+        y=y+".";
+        for(ll i=0;i<b2.size();i++)
+        {
+        	if(b2[i]<=9)b2[i]+=48;
+            else if(b2[i]>9)b2[i]+=55;
+            y+=(char)b2[i];;
+        }
+        if(x.compare(y)<0)return 1;
+        else if(x.compare(y)>0)return 2;
         else return 0;
      }
 
@@ -342,7 +435,7 @@ public:
 
 int main()
 {
-    string a="1234",b="12";
+    string a="9",b="A";
     ultra_num z;
     cout<<z.udiv(a,b,16);
     return 0;
