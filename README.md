@@ -1,2 +1,2 @@
 # Large-Number-Operation-Library
-A c++ class to handle arithmetic operation of large number both floating and integer
+A c++ class to handle arithmetic operation of large number  floating integer with any base.
