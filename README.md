@@ -1,5 +1,5 @@
 # Large-Number-Operation-Library
-A c++ class to handle arithmetic operation of large number  floating integer with any base.
+A c++ class to handle Arithmetic Operation of Large Floating Numbers with any base.
 
 ## Status
 Repository status([badge](https://img.shields.io/badge/)):
